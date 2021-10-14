@@ -73,11 +73,11 @@ namespace DatabaseAPIs.Controllers
             }
         }
         [HttpDelete]
-        public HttpResponseMessage DeleteBook(string isbn)
+        public HttpResponseMessage DeleteBook(string bookID)
         {
             try
             {
-                string data = db.DeleteData(isbn);
+                string data = db.DeleteData(bookID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

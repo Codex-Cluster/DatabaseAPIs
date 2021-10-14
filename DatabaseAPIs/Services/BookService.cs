@@ -83,15 +83,13 @@ namespace DatabaseAPIs.Services
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
-            {
-                con.Open();
-                
+            {   
                 cmd.CommandText = String.Format(
-                    "update Books set Author='{0}', Title='{1}', CatID='{2}', ISBN='{3}', Image='{4}', Rating='{5}', Format='{6}', Price='{7}', OldPrice='{8}', Description='{9}', Position='{10}' ,Status='{11}' Year='{12}' where BookID='{13}';",
+                    "update Books set Author='{0}', Title='{1}', CatID='{2}', ISBN='{3}', Image='{4}', Rating='{5}', Format='{6}', Price='{7}', OldPrice='{8}', Description='{9}', Position='{10}' ,Status='{11}', Year='{12}' where BookID='{13}';",
                     book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Description, book.Position, book.Status, book.Year, book.BookID
                     );
-                
-                return cmd.ExecuteNonQuery().ToString();
+                con.Open();
+                cmd.ExecuteNonQuery();
             }
             Books = LoadBooks();
             return String.Format(
@@ -100,18 +98,18 @@ namespace DatabaseAPIs.Services
                 );
         }
 
-        public string DeleteData(string isbn)
+        public string DeleteData(string bookID)
         {
 
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
-                cmd.CommandText = String.Format("DELETE FROM Books WHERE ISBN='{0}'", isbn);
+                cmd.CommandText = String.Format("DELETE FROM Books WHERE BookID='{0}'", bookID);
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            Books.Remove(Books.FirstOrDefault(book => book.ISBN == isbn));
-            return String.Format("Deleted book where ISBN == {0}", isbn);
+            Books.Remove(Books.FirstOrDefault(book => book.BookID == bookID));
+            return String.Format("Deleted book where BookID == {0}", bookID);
         }
     }
 }

@@ -31,11 +31,11 @@ namespace DatabaseAPIs.Controllers
             }
         }
         [HttpGet]
-        public HttpResponseMessage GetData(string CatID)
+        public HttpResponseMessage GetData(string catID)
         {
             try
             {
-                List<Book> data = db.GetBooks(CatID);
+                List<Book> data = db.GetBooks(catID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

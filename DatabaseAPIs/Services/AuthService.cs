@@ -15,7 +15,7 @@ namespace DatabaseAPIs.Services
 {
     public class AuthService : IAuth
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["AuthDB"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["CodexDB"].ConnectionString;
 
         private static AuthService Instance = null;
         public static AuthService instantiateDB()
@@ -32,7 +32,7 @@ namespace DatabaseAPIs.Services
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
-                cmd.CommandText = String.Format("select count(*) from UserData");
+                cmd.CommandText = String.Format("select count(*) from Users");
                 con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 dr.Read();
@@ -71,12 +71,12 @@ namespace DatabaseAPIs.Services
                         SqlDataReader dr = cmd.ExecuteReader();
                         while (dr.Read())
                         {
-                            ResUser.Name = dr["Name"].ToString();
+                            ResUser.Name = dr["Name"].ToString().Trim(' ');
                             ResUser.Email = dr["Email"].ToString();
                             ResUser.Mobile = Int32.Parse(dr["Mobile"].ToString());
-                            ResUser.UserID = dr["UserID"].ToString();
+                            ResUser.UserID = dr["UserID"].ToString().Trim(' ');
                             ResUser.Password = dr["Password"].ToString();
-                            ResUser.Active = Boolean.Parse(dr["IsAdmin"].ToString());
+                            ResUser.Active = Boolean.Parse(dr["Active"].ToString());
                             ResUser.Cart = dr["Cart"].ToString().Split(';').ToList<string>();
                             ResUser.Roles = dr["Roles"].ToString().Split(';').ToList<string>();
                             ResUser.Wishlist = dr["Wishlist"].ToString().Split(';').ToList<string>();
@@ -108,7 +108,7 @@ namespace DatabaseAPIs.Services
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format(
-                    "insert into UserData (userID, Name, Email, Mobile, Password, Roles) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
+                    "insert into Users (userID, Name, Email, Mobile, Password, Roles) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')",
                     user.UserID, user.Name, user.Email, user.Mobile, user.Password, user.Roles
                     );
                 con.Open();

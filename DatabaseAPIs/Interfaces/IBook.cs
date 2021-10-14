@@ -11,7 +11,7 @@ namespace DatabaseAPIs.Interfaces
     interface IBook
     {
         List<Book> GetData();
-        Book GetData(string isbn);
+        Book GetData(string bookID);
         string PutData(Book book);
 
         string PostData(Book book);
