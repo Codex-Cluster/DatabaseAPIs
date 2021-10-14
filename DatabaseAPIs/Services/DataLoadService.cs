@@ -30,7 +30,7 @@ namespace DatabaseAPIs.Services
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
-                cmd.CommandText = "SELECT * FROM Category";
+                cmd.CommandText = "SELECT * FROM Categories";
                 con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 return ConvertToCategoryList(dr);
