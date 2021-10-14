@@ -35,7 +35,7 @@ namespace DatabaseAPIs.Services
 
         }
 
-        public List<Book> GetSubCategories(string CatID)
+        public List<Book> GetBooks(string CatID)
         {
             return Books.FindAll(x => x.CatID == CatID);
         }

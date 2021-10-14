@@ -48,6 +48,7 @@ namespace DatabaseAPIs.Services
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format("select count(*) from Books");
+                con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -56,9 +57,9 @@ namespace DatabaseAPIs.Services
                 _bookID = "book" + new string('0', (5 - _pos.ToString().Length)) + _pos.ToString();
                 cmd.CommandText = String.Format(
                     "insert into Books (Author, Title, CatID, ISBN, Image, Rating, Format, Price, OldPrice, Year, Position, Status, Description, BookID) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}', )",
-                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Year, _pos, "Available", book.Description, _bookID
+                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Year, _pos, book.Status, book.Description, _bookID
                     );
-                con.Open();
+                
                 cmd.ExecuteNonQuery();
             }
             Books.Add(book);

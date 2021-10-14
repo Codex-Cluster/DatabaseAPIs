@@ -11,6 +11,6 @@ namespace DatabaseAPIs.Interfaces
     interface ICategory
     {
         List<string> GetCategories();
-        List<Book> GetSubCategories(string CatID);
+        List<Book> GetBooks(string CatID);
     }
 }
