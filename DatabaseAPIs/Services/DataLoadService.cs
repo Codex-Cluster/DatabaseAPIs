@@ -44,7 +44,7 @@ namespace DatabaseAPIs.Services
                 // rows.Add(columns.ToDictionary(column => column, column => reader[column]));
                 rows.Add(new Book()
                 {
-                    BookID = reader["BookID"].ToString(),
+                    BookID = reader["BookID"].ToString().Trim(' '),
                     CatID = reader["CatID"].ToString(),
                     Image = reader["Image"].ToString(),
                     Author = reader["Author"].ToString(),
@@ -70,7 +70,7 @@ namespace DatabaseAPIs.Services
                 // rows.Add(columns.ToDictionary(column => column, column => reader[column]));
                 rows.Add(new Category()
                 {
-                    CatID = reader["CatID"].ToString(),
+                    CatID = reader["CatID"].ToString().Trim(),
                     CatName = reader["CatName"].ToString(),
                     CatDescription = reader["CatDescription"].ToString(),
                     Position = Int32.Parse(reader["Position"].ToString()),

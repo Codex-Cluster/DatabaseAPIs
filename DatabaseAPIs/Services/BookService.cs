@@ -35,9 +35,9 @@ namespace DatabaseAPIs.Services
             return Books;
         }
 
-        public Book GetData(string isbn)
+        public Book GetData(string bookID)
         {
-            return Books.FirstOrDefault(book => book.ISBN == isbn);
+            return Books.FirstOrDefault(book => book.BookID == bookID);
         }
 
         public string PostData(Book book)
@@ -54,18 +54,28 @@ namespace DatabaseAPIs.Services
                 {
                     _pos = Int32.Parse(dr[0].ToString());
                 }
-                _bookID = "book" + new string('0', (5 - _pos.ToString().Length)) + _pos.ToString();
+                _bookID = "book" + new string('0', (5 - (_pos + 1).ToString().Length)) + (_pos + 1).ToString();
+            }
+            book.BookID = _bookID;
+            if(book.Position == 0)
+            {
+                book.Position = _pos;
+            }
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = con.CreateCommand())
+            {
                 cmd.CommandText = String.Format(
-                    "insert into Books (Author, Title, CatID, ISBN, Image, Rating, Format, Price, OldPrice, Year, Position, Status, Description, BookID) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}', )",
-                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Year, _pos, book.Status, book.Description, _bookID
+                    "insert into Books (Author, Title, CatID, ISBN, Image, Rating, Format, Price, OldPrice, Year, Position, Status, Description, BookID) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}')",
+                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Year, book.Position, book.Status, book.Description, book.BookID
                     );
-                
+                con.Open();
                 cmd.ExecuteNonQuery();
             }
+
             Books.Add(book);
             return String.Format(
-                "Successfully added book! Author: {0} Title: {1} CatID: {2} ISBN: {3} Year: {4}",
-                book.Author, book.Title, book.CatID, book.ISBN, book.Year, book.Rating, book.Format, book.Price, book.OldPrice
+                "Successfully added book! Author: {0} Title: {1} CatID: {2} ISBN: {3} Year: {4} BookID: {5}",
+                book.Author, book.Title, book.CatID, book.ISBN, book.Year, _bookID, book.Rating, book.Format, book.Price, book.OldPrice
                 );
         }
 
@@ -74,12 +84,14 @@ namespace DatabaseAPIs.Services
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
-                cmd.CommandText = String.Format(
-                    "update Books set Author='{0}', Title='{1}', CatID='{2}', ISBN='{3}', Image='{4}', Rating='{5}', Format='{6}', Price='{7}', OldPrice='{8}', Description='{9}', Position='{10}' ,Status='{11}' Year='{12}' where ISBN='{3}'",
-                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Description, book.Position, book.Status, book.Year
-                    );
                 con.Open();
-                cmd.ExecuteNonQuery();
+                
+                cmd.CommandText = String.Format(
+                    "update Books set Author='{0}', Title='{1}', CatID='{2}', ISBN='{3}', Image='{4}', Rating='{5}', Format='{6}', Price='{7}', OldPrice='{8}', Description='{9}', Position='{10}' ,Status='{11}' Year='{12}' where BookID='{13}';",
+                    book.Author, book.Title, book.CatID, book.ISBN, book.Image, book.Rating, book.Format, book.Price, book.OldPrice, book.Description, book.Position, book.Status, book.Year, book.BookID
+                    );
+                
+                return cmd.ExecuteNonQuery().ToString();
             }
             Books = LoadBooks();
             return String.Format(

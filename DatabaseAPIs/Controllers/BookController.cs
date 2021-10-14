@@ -30,11 +30,11 @@ namespace DatabaseAPIs.Controllers
                 return Request.CreateResponse(HttpStatusCode.NoContent);
             }
         }
-        public HttpResponseMessage GetBooks(string isbn)
+        public HttpResponseMessage GetBooks(string bookID)
         {
             try
             {
-                Book data = db.GetData(isbn);
+                Book data = db.GetData(bookID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
