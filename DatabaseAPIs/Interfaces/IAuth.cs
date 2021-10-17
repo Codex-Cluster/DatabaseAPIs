@@ -12,5 +12,9 @@ namespace DatabaseAPIs.Interfaces
     {
         User login(User user);
         bool register(User user);
+        bool isValidServiceKey(string key);
+
+        bool ModifyUserCart(string userID, string item, string operation);
+        bool ModifyUserWishlist(string userID, string item, string operation);
     }
 }

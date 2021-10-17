@@ -16,5 +16,6 @@ namespace DatabaseAPIs.Models
         public List<string> Roles { get; set; }
         public List<string> Cart { get; set; }
         public List<string> Wishlist { get; set; }
+        public string Address { get; set; }
     }
 }

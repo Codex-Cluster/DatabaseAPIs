@@ -43,8 +43,53 @@ namespace DatabaseAPIs.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.Conflict);
+                return Request.CreateResponse(e);
             }
         }
+        [HttpGet]
+        [Route("auth/validate-key")]
+        public HttpResponseMessage Validate(string key)
+        {
+            try
+            {
+                bool data = db.isValidServiceKey(key);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpPost]
+        [Route("user/cart")]
+        public HttpResponseMessage ModifyCart(string userID, string item, string operation)
+        {
+            try
+            {
+                bool data = db.ModifyUserCart(userID, item, operation);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+
+        [HttpPost]
+        [Route("user/wishlist")]
+        public HttpResponseMessage ModifyWishlist(string userID, string item, string operation)
+        {
+            try
+            {
+                bool data = db.ModifyUserWishlist(userID, item, operation);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+
+
     }
 }
