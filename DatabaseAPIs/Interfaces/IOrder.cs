@@ -8,10 +8,11 @@ using DatabaseAPIs.Models;
 
 namespace DatabaseAPIs.Interfaces
 {
-    interface IAuth
+    interface IOrder
     {
-        User login(User user);
-        User register(User user);
-        bool isValidServiceKey(string key);
+        bool MakeOrder(Order order);
+        bool CancelOrder(Order order);
+
+        List<Order> GetOrders(string userID);
     }
 }

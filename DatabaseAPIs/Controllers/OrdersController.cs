@@ -12,18 +12,16 @@ using DatabaseAPIs.Services;
 
 namespace DatabaseAPIs.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class AuthController : ApiController
+    public class OrdersController : ApiController
     {
-        AuthService db = AuthService.instantiateDB();
+        OrderService db = OrderService.instantiateDB();
 
         [HttpPost]
-        [Route("auth/login")]
-        public HttpResponseMessage login(User user)
+        public HttpResponseMessage makeOrder(Order order)
         {
             try
             {
-                User data = db.login(user);
+                bool data = db.MakeOrder(order);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -32,13 +30,12 @@ namespace DatabaseAPIs.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("auth/register")]
-        public HttpResponseMessage register(User user)
+        [HttpDelete]
+        public HttpResponseMessage cancelOrder(Order order)
         {
             try
             {
-                User data = db.register(user);
+                bool data = db.CancelOrder(order);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -47,12 +44,11 @@ namespace DatabaseAPIs.Controllers
             }
         }
         [HttpGet]
-        [Route("auth/validate-key")]
-        public HttpResponseMessage Validate(string key)
+        public HttpResponseMessage getAllOrders(string userID)
         {
             try
             {
-                bool data = db.isValidServiceKey(key);
+                List<Order> data = db.GetOrders(userID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

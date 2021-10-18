@@ -91,23 +91,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IAdmin.cs" />
     <Compile Include="Interfaces\IAuth.cs" />
     <Compile Include="Interfaces\IBook.cs" />
     <Compile Include="Interfaces\ICategory.cs" />
+    <Compile Include="Interfaces\IOrder.cs" />
+    <Compile Include="Interfaces\IUserData.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Coupon.cs" />
+    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdminControls.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\DataLoadService.cs" />
+    <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\UserDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
