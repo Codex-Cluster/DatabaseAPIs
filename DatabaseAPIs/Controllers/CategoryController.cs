@@ -22,7 +22,7 @@ namespace DatabaseAPIs.Controllers
         {
             try
             {
-                List<string> data = db.GetCategories();
+                List<Category> data = db.GetCategories();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

@@ -29,9 +29,9 @@ namespace DatabaseAPIs.Services
             Books = LoadBooks();
         }
 
-        public List<string> GetCategories()
+        public List<Category> GetCategories()
         {
-            return Categories.Select(x => x.CatName).ToList();
+            return Categories;
 
         }
 

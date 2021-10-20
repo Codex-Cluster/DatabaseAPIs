@@ -58,7 +58,7 @@ namespace DatabaseAPIs.Services
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Failed to retrieve hashed password from database\n",e);
+                    throw new Exception("User does not exist in database");
                 }
                 con.Close();
 

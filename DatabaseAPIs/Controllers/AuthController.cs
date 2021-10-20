@@ -28,7 +28,7 @@ namespace DatabaseAPIs.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(e);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
         }
 
@@ -43,7 +43,7 @@ namespace DatabaseAPIs.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(e);
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
         [HttpGet]
@@ -57,7 +57,7 @@ namespace DatabaseAPIs.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(e);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
         }
     }
