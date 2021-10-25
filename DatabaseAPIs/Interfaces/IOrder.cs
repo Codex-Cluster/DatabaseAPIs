@@ -13,6 +13,6 @@ namespace DatabaseAPIs.Interfaces
         bool MakeOrder(Order order);
         bool CancelOrder(Order order);
 
-        List<Order> GetOrders(string userID);
+        OrderDetails GetOrders(string userID);
     }
 }

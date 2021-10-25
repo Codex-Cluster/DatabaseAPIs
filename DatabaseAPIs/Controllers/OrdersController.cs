@@ -12,6 +12,7 @@ using DatabaseAPIs.Services;
 
 namespace DatabaseAPIs.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OrdersController : ApiController
     {
         OrderService db = OrderService.instantiateDB();
@@ -48,7 +49,7 @@ namespace DatabaseAPIs.Controllers
         {
             try
             {
-                List<Order> data = db.GetOrders(userID);
+                OrderDetails data = db.GetOrders(userID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

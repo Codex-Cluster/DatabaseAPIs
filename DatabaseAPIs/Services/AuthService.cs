@@ -77,9 +77,9 @@ namespace DatabaseAPIs.Services
                             ResUser.UserID = dr["UserID"].ToString().Trim(' ');
                             ResUser.Password = dr["Password"].ToString();
                             ResUser.Active = Boolean.Parse(dr["Active"].ToString());
-                            ResUser.Cart = dr["Cart"].ToString().Split(';').ToList<string>();
-                            ResUser.Roles = dr["Roles"].ToString().Split(';').ToList<string>();
-                            ResUser.Wishlist = dr["Wishlist"].ToString().Split(';').ToList<string>();
+                            ResUser.Cart = dr["Cart"].ToString().Split('+').ToList<string>();
+                            ResUser.Roles = dr["Roles"].ToString().Split('+').ToList<string>();
+                            ResUser.Wishlist = dr["Wishlist"].ToString().Split('+').ToList<string>();
                             ResUser.Address = dr["Address"].ToString();
                         }
                         return ResUser;
@@ -102,12 +102,13 @@ namespace DatabaseAPIs.Services
             count++;
             user.UserID = "user_" + new string('0', (5 - count.ToString().Length)) + count.ToString();
             user.Password = ComputeSha256Hash(user.Password);
+            string roles = string.Join("+", user.Roles.ToArray());
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format(
                     "insert into Users (userID, Name, Email, Mobile, Password, Roles, Address) values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')",
-                    user.UserID, user.Name, user.Email, user.Mobile, user.Password, user.Roles, user.Address
+                    user.UserID, user.Name, user.Email, user.Mobile, user.Password, roles, user.Address
                     );
                 con.Open();
                 try

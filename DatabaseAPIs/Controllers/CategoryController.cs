@@ -43,5 +43,31 @@ namespace DatabaseAPIs.Controllers
                 return Request.CreateResponse(HttpStatusCode.Conflict);
             }
         }
+        [HttpPost]
+        public HttpResponseMessage CreateCategory(Category category)
+        {
+            try
+            {
+                Category data = db.AddCategory(category);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpDelete]
+        public HttpResponseMessage DeleteCategory(Category category)
+        {
+            try
+            {
+                bool data = db.DeleteCategory(category);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
     }
 }

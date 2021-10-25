@@ -12,6 +12,7 @@ using DatabaseAPIs.Services;
 
 namespace DatabaseAPIs.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
         UserDataService db = UserDataService.instantiateDB();
@@ -38,6 +39,34 @@ namespace DatabaseAPIs.Controllers
             try
             {
                 bool data = db.ModifyUserWishlist(userID, item, operation);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpGet]
+        [Route("user/cart")]
+        public HttpResponseMessage GetCart(string userID)
+        {
+            try
+            {
+                List<Order> data = db.GetCart(userID);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpGet]
+        [Route("user/wishlist")]
+        public HttpResponseMessage GetWishlist(string userID)
+        {
+            try
+            {
+                List<Order> data = db.GetWishlist(userID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

@@ -72,7 +72,8 @@ namespace DatabaseAPIs.Services
                 cmd.ExecuteNonQuery();
             }
 
-            Books.Add(book);
+            Books = LoadBooks();
+
             return String.Format(
                 "Successfully added book! Author: {0} Title: {1} CatID: {2} ISBN: {3} Year: {4} BookID: {5}",
                 book.Author, book.Title, book.CatID, book.ISBN, book.Year, _bookID, book.Rating, book.Format, book.Price, book.OldPrice

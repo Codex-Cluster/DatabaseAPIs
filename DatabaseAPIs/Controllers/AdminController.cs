@@ -12,6 +12,7 @@ using DatabaseAPIs.Services;
 
 namespace DatabaseAPIs.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AdminController : ApiController
     {
 

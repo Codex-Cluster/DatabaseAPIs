@@ -12,5 +12,8 @@ namespace DatabaseAPIs.Interfaces
     {
         List<Category> GetCategories();
         List<Book> GetBooks(string CatID);
+
+        Category AddCategory(Category category);
+        bool DeleteCategory(Category category);
     }
 }

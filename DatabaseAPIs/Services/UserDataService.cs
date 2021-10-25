@@ -237,5 +237,156 @@ namespace DatabaseAPIs.Services
             }
             return true;
         }
+
+        public List<Order> GetCart(string userID)
+        {
+            List<Order> books = new List<Order>();
+            string cart = string.Empty;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = String.Format(
+                    "select Cart from Users where UserID='{0}'",
+                    userID
+                    );
+                con.Open();
+                try
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    dr.Read();
+                    cart = dr.GetString(0);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+            List<string> bookList = new List<string>();
+            bookList = cart.Split('+').ToList();
+            foreach (string bookInfo in bookList)
+            {
+                string bookID = bookInfo.Split(':').ToList()[0];
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = String.Format(
+                        "select * from Books where BookID='{0}'",
+                        bookID
+                        );
+                    con.Open();
+                    try
+                    {
+                        SqlDataReader dr = cmd.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            books.Add(new Order()
+                            {
+                                BookID = dr["BookID"].ToString().Trim(' '),
+                                CatID = dr["CatID"].ToString(),
+                                Image = dr["Image"].ToString(),
+                                Author = dr["Author"].ToString(),
+                                Title = dr["Title"].ToString(),
+                                Format = dr["Format"].ToString(),
+                                Rating = double.Parse(dr["Rating"].ToString()),
+                                Price = double.Parse(dr["Price"].ToString()),
+                                OldPrice = double.Parse(dr["OldPrice"].ToString()),
+                                ISBN = dr["ISBN"].ToString(),
+                                Description = dr["Description"].ToString(),
+                                Year = dr["Year"].ToString(),
+                                Position = Int32.Parse(dr["Position"].ToString()),
+                                Status = dr["Status"].ToString(),
+                                qty = Int32.Parse(bookInfo.Split(':').ToList()[1])
+                            });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+
+                }
+            }
+
+            return books;
+        }
+        public List<Order> GetWishlist(string userID)
+        {
+            List<Order> books = new List<Order>();
+            string wishlist = string.Empty;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = String.Format(
+                    "select Wishlist from Users where UserID='{0}'",
+                    userID
+                    );
+                con.Open();
+                try
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    dr.Read();
+                    wishlist = dr.GetString(0);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+            List<string> bookList = new List<string>();
+            if (wishlist.Contains('+'))
+            {
+                bookList = wishlist.Split('+').ToList();
+            }
+            else
+            {
+                bookList.Add(wishlist);
+            }
+            
+            foreach(string bookInfo in bookList)
+            {
+                string bookID = bookInfo.Split(':').ToList()[0];
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = String.Format(
+                        "select * from Books where BookID='{0}'",
+                        bookID
+                        );
+                    con.Open();
+                    try
+                    {
+                        SqlDataReader dr = cmd.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            books.Add(new Order()
+                            {
+                                BookID = dr["BookID"].ToString().Trim(' '),
+                                CatID = dr["CatID"].ToString(),
+                                Image = dr["Image"].ToString(),
+                                Author = dr["Author"].ToString(),
+                                Title = dr["Title"].ToString(),
+                                Format = dr["Format"].ToString(),
+                                Rating = double.Parse(dr["Rating"].ToString()),
+                                Price = double.Parse(dr["Price"].ToString()),
+                                OldPrice = double.Parse(dr["OldPrice"].ToString()),
+                                ISBN = dr["ISBN"].ToString(),
+                                Description = dr["Description"].ToString(),
+                                Year = dr["Year"].ToString(),
+                                Position = Int32.Parse(dr["Position"].ToString()),
+                                Status = dr["Status"].ToString(),
+                                qty = Int32.Parse(bookInfo.Split(':').ToList()[1])
+                            });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+
+                }
+            }
+
+            return books;
+        }
     }
 }

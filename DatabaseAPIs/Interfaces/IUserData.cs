@@ -14,5 +14,8 @@ namespace DatabaseAPIs.Interfaces
         bool ModifyUserWishlist(string userID, string item, string operation);
 
         bool UpdateUserInfo(User user);
+
+        List<Order> GetCart(string userID);
+        List<Order> GetWishlist(string userID);
     }
 }
