@@ -74,5 +74,34 @@ namespace DatabaseAPIs.Controllers
                 return Request.CreateResponse(e);
             }
         }
+        [HttpPut]
+        [Route("user/cart")]
+        public HttpResponseMessage MoveToWishlist(string userID, string item, int qty)
+        {
+            try
+            {
+                bool data = db.MoveToWishlist(userID, item, qty);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpPut]
+        [Route("user/wishlist")]
+        public HttpResponseMessage MoveToCart(string userID, string item, int qty)
+        {
+            try
+            {
+                bool data = db.MoveToCart(userID, item, qty);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+
     }
 }

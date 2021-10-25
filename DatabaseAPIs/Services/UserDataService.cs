@@ -24,7 +24,7 @@ namespace DatabaseAPIs.Services
         }
 
         private string connectionString = ConfigurationManager.ConnectionStrings["CodexDB"].ConnectionString;
-        public bool ModifyUserCart(string userID, string item, string operation)
+        public bool ModifyUserCart(string userID, string item, string operation, int qty = 1)
         {
             string cart = "";
             List<string> cartList = new List<string>();
@@ -42,7 +42,7 @@ namespace DatabaseAPIs.Services
                     cart = dr.GetString(0);
                     if (cart.Count() == 0)
                     {
-                        cartDict[item] = 1;
+                        cartDict[item] = qty;
                     }
                     else
                     {
@@ -58,17 +58,17 @@ namespace DatabaseAPIs.Services
                             flag = true;
                             if (operation == "Add")
                             {
-                                cartDict[item] += 1;
+                                cartDict[item] += qty;
                             }
                             else if (operation == "Remove")
                             {
-                                if (cartDict[item] == 1)
+                                if ((cartDict[item] - qty) <= 1)
                                 {
                                     cartDict.Remove(item);
                                 }
                                 else
                                 {
-                                    cartDict[item] -= 1;
+                                    cartDict[item] -= qty;
                                 }
                             }
                             else if (operation == "Delete")
@@ -78,7 +78,7 @@ namespace DatabaseAPIs.Services
                         }
                         if (flag != true && operation == "Add")
                         {
-                            cartDict[item] = 1;
+                            cartDict[item] = qty;
                         }
                         else if (flag != true && operation != "Add")
                         {
@@ -118,7 +118,7 @@ namespace DatabaseAPIs.Services
                 return true;
             }
         }
-        public bool ModifyUserWishlist(string userID, string item, string operation)
+        public bool ModifyUserWishlist(string userID, string item, string operation, int qty = 1)
         {
             string wishlist = "";
             List<string> wishlistList = new List<string>();
@@ -136,7 +136,7 @@ namespace DatabaseAPIs.Services
                     wishlist = dr.GetString(0);
                     if (wishlist.Count() == 0)
                     {
-                        wishlistDict[item] = 1;
+                        wishlistDict[item] = qty;
                     }
                     else
                     {
@@ -152,17 +152,17 @@ namespace DatabaseAPIs.Services
                             flag = true;
                             if (operation == "Add")
                             {
-                                wishlistDict[item] += 1;
+                                wishlistDict[item] += qty;
                             }
                             else if (operation == "Remove")
                             {
-                                if (wishlistDict[item] == 1)
+                                if ((wishlistDict[item]-qty) <= 0)
                                 {
                                     wishlistDict.Remove(item);
                                 }
                                 else
                                 {
-                                    wishlistDict[item] -= 1;
+                                    wishlistDict[item] -= qty;
                                 }
                             }
                             else if (operation == "Delete")
@@ -174,7 +174,7 @@ namespace DatabaseAPIs.Services
 
                         if (flag != true && operation == "Add")
                         {
-                            wishlistDict[item] = 1;
+                            wishlistDict[item] = qty;
                         }
                         else if (flag != true && operation != "Add")
                         {
@@ -185,7 +185,7 @@ namespace DatabaseAPIs.Services
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Failed to retrieve wishlist from database\n{0}", e);
+                    throw new Exception("Failed to retrieve wishlist from database", e);
                 }
             }
             wishlistList = new List<string>();
@@ -387,6 +387,33 @@ namespace DatabaseAPIs.Services
             }
 
             return books;
+        }
+        public bool MoveToCart(string userID, string item, int qty)
+        {
+            try
+            {
+                this.ModifyUserWishlist(userID, item, "Remove", qty);
+                this.ModifyUserCart(userID, item, "Add", qty);
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return true;
+        }
+        public bool MoveToWishlist(string userID, string item, int qty)
+        {
+            try
+            {
+                this.ModifyUserCart(userID, item, "Remove", qty);
+                this.ModifyUserWishlist(userID, item, "Add", qty);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return true;
         }
     }
 }
