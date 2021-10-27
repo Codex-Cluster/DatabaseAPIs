@@ -73,7 +73,7 @@ namespace DatabaseAPIs.Services
                         {
                             ResUser.Name = dr["Name"].ToString().Trim(' ');
                             ResUser.Email = dr["Email"].ToString();
-                            ResUser.Mobile = Int32.Parse(dr["Mobile"].ToString());
+                            ResUser.Mobile = dr["Mobile"].ToString();
                             ResUser.UserID = dr["UserID"].ToString().Trim(' ');
                             ResUser.Password = dr["Password"].ToString();
                             ResUser.Active = Boolean.Parse(dr["Active"].ToString());

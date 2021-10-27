@@ -207,7 +207,7 @@ namespace DatabaseAPIs.Services
                     SqlDataReader dr = cmd.ExecuteReader();
                     dr.Read();
                     roles = dr.GetString(0);
-                    roleList = roles.Split(',').ToList();
+                    roleList = roles.Split('+').ToList();
                     foreach (string role in roleList)
                     {
                         if (role == "Admin")
@@ -228,7 +228,7 @@ namespace DatabaseAPIs.Services
                 using (SqlCommand cmd = con.CreateCommand())
                 {
                     cmd.CommandText = String.Format(
-                        "select id, code, discount, [status], creator from Users"
+                        "select id, code, discount, [status], creator from CouponCodes"
                     );
                     con.Open();
                     try

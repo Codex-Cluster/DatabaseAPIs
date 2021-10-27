@@ -215,14 +215,15 @@ namespace DatabaseAPIs.Services
             }
         }
 
-        public bool UpdateUserInfo(User user)
+        public User UpdateUserInfo(User user)
         {
+            string roles = string.Join("+", user.Roles);
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format(
-                    "exec ModifyUserInfo @userID = '{0}', @name = '{1}', @email = '{2}', @mobile = '{3}', @address = '{4}'",
-                    user.UserID, user.Name, user.Email, user.Mobile, user.Address
+                    "exec ModifyUserInfo @userID = '{0}', @name = '{1}', @email = '{2}', @mobile = '{3}', @address = '{4}', @roles = '{5}', @active = '{6}'",
+                    user.UserID, user.Name, user.Email, user.Mobile, user.Address, roles, user.Active
                     );
                 con.Open();
                 try
@@ -235,7 +236,43 @@ namespace DatabaseAPIs.Services
                 }
 
             }
-            return true;
+            return GetUserData(user.UserID);
+        }
+        private User GetUserData(string userID)
+        {
+            User user = new User();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = String.Format(
+                    "select * from Users where UserID = '{0}'",
+                    userID
+                    );
+                con.Open();
+                try
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        user.Name = dr["Name"].ToString().Trim(' ');
+                        user.Email = dr["Email"].ToString();
+                        user.Mobile = dr["Mobile"].ToString();
+                        user.UserID = dr["UserID"].ToString().Trim(' ');
+                        user.Password = dr["Password"].ToString();
+                        user.Active = Boolean.Parse(dr["Active"].ToString());
+                        user.Cart = dr["Cart"].ToString().Split('+').ToList<string>();
+                        user.Roles = dr["Roles"].ToString().Split('+').ToList<string>();
+                        user.Wishlist = dr["Wishlist"].ToString().Split('+').ToList<string>();
+                        user.Address = dr["Address"].ToString();
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+
+            }
+            return user;
         }
 
         public List<Order> GetCart(string userID)

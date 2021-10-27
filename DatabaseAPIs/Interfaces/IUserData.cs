@@ -13,7 +13,7 @@ namespace DatabaseAPIs.Interfaces
         bool ModifyUserCart(string userID, string item, string operation, int qty);
         bool ModifyUserWishlist(string userID, string item, string operation, int qty);
 
-        bool UpdateUserInfo(User user);
+        User UpdateUserInfo(User user);
 
         List<Order> GetCart(string userID);
         List<Order> GetWishlist(string userID);

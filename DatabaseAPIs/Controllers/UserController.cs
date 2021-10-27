@@ -17,6 +17,21 @@ namespace DatabaseAPIs.Controllers
     {
         UserDataService db = UserDataService.instantiateDB();
 
+
+        [HttpPost]
+        [Route("user/edit")]
+        public HttpResponseMessage ModifyUser(User user)
+        {
+            try
+            {
+                User data = db.UpdateUserInfo(user);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
         [HttpPost]
         [Route("user/cart")]
         public HttpResponseMessage ModifyCart(string userID, string item, string operation)
