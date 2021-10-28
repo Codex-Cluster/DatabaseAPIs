@@ -16,7 +16,7 @@ namespace DatabaseAPIs.Interfaces
         bool RemoveCoupon(Coupon coupon);
         bool ModifyCoupon(Coupon coupon);
 
-        bool SetAuthorized(string userID, bool status);
+        User modifyUser(User user);
 
         List<User> getUserList(string userID);
     }

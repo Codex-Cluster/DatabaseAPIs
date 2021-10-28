@@ -96,14 +96,14 @@ namespace DatabaseAPIs.Services
         }
 
 
-        public bool SetAuthorized(string userID, bool status)
+        public User modifyUser(User user)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format(
-                    "update Users set Active = '{0}' where UserID = '{1}'",
-                    status, userID
+                    "update Users set Name = '{0}', Email = '{1}', Mobile = '{2}', Address = '{3}', Roles = '{4}', Active = '{5}' where UserID = '{6}'",
+                    user.Name, user.Email, user.Mobile, user.Address, string.Join("+",user.Roles), user.Active, user.UserID
                 );
                 con.Open();
                 try
@@ -112,11 +112,11 @@ namespace DatabaseAPIs.Services
                 }
                 catch (Exception e)
                 {
-                    return false;
+                    throw new Exception(e.Message);
                 }
 
             }
-            return true;
+            return user;
         }
 
         public List<User> getUserList(string userID)
@@ -138,7 +138,7 @@ namespace DatabaseAPIs.Services
                     SqlDataReader dr = cmd.ExecuteReader();
                     dr.Read();
                     roles = dr.GetString(0);
-                    roleList = roles.Split(',').ToList();
+                    roleList = roles.Split('+').ToList();
                     foreach( string role in roleList)
                     {
                         if( role == "Admin")
@@ -159,7 +159,7 @@ namespace DatabaseAPIs.Services
                 using (SqlCommand cmd = con.CreateCommand())
                 {
                     cmd.CommandText = String.Format(
-                        "select Name, Email, Active, Roles from Users"
+                        "select * from Users"
                     );
                     con.Open();
                     try
@@ -168,11 +168,17 @@ namespace DatabaseAPIs.Services
                         SqlDataReader dr = cmd.ExecuteReader();
                         while (dr.Read())
                         {
-                            userList.Add(new User() { 
-                                Name = dr["Name"].ToString(),
+                            userList.Add(new User() {
+                                Name = dr["Name"].ToString().Trim(' '),
                                 Email = dr["Email"].ToString(),
-                                Active = bool.Parse(dr["Active"].ToString()),
-                                Roles = dr["Roles"].ToString().Split(',').ToList()
+                                Mobile = dr["Mobile"].ToString(),
+                                UserID = dr["UserID"].ToString().Trim(' '),
+                                Password = dr["Password"].ToString(),
+                                Active = Boolean.Parse(dr["Active"].ToString()),
+                                Cart = dr["Cart"].ToString().Split('+').ToList<string>(),
+                                Roles = dr["Roles"].ToString().Split('+').ToList<string>(),
+                                Wishlist = dr["Wishlist"].ToString().Split('+').ToList<string>(),
+                                Address = dr["Address"].ToString(),
                             });
                         }
                     }

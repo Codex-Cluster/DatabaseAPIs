@@ -19,12 +19,12 @@ namespace DatabaseAPIs.Controllers
         AdminControls db = AdminControls.instantiateDB();
 
         [HttpPost]
-        [Route("admin/authorize")]
-        public HttpResponseMessage authorize(string user, bool status)
+        [Route("admin/modifyUser")]
+        public HttpResponseMessage modifyUser(User user)
         {
             try
             {
-                bool data = db.SetAuthorized(user, status);
+                User data = db.modifyUser(user);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -83,6 +83,20 @@ namespace DatabaseAPIs.Controllers
             try
             {
                 List<Coupon> data = db.CouponList(userID);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+        [HttpGet]
+        [Route("admin/users")]
+        public HttpResponseMessage ModifyUser(string userID)
+        {
+            try
+            {
+                List<User> data = db.getUserList(userID);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
