@@ -31,12 +31,29 @@ namespace DatabaseAPIs.Services
 
         public bool CancelOrder(Order order)
         {
+            List<string> bookList = new List<string>();
+
+            string books = string.Empty;
+            foreach (string bookID in order.books.Keys)
+            {
+                bookList.Add(string.Format("{0}:{1}", bookID, order.books[bookID]));
+            }
+            int count = 0;
+            foreach (string bookQty in bookList)
+            {
+                books += string.Format("{0}", bookQty);
+                count += 1;
+                if (count != bookList.Count())
+                {
+                    books += "+";
+                }
+            }
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = String.Format(
-                    "exec CancelOrder @orderID = '{0}', @userId = '{1}'",
-                    order.orderID, order.userID
+                    "exec CancelOrder @books = '{0}', @userID = '{1}', @datetime = '{2}'",
+                    books, order.userID, order.datetime
                 );
                 con.Open();
                 try
@@ -82,7 +99,7 @@ namespace DatabaseAPIs.Services
                             books = bookDict,
                             datetime = dr["datetime"].ToString(),
                             amt = float.Parse(dr["AmountPaid"].ToString()),
-                            address = dr["Address"].ToString()
+                            address = dr["Address"].ToString(),
                         }
                        );
                     }
@@ -154,6 +171,7 @@ namespace DatabaseAPIs.Services
         public bool MakeOrder(Order order)
         {
             List<string> bookList = new List<string>();
+ 
             string books = string.Empty;
             foreach (string bookID in order.books.Keys)
             {

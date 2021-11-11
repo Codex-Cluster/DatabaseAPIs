@@ -452,5 +452,46 @@ namespace DatabaseAPIs.Services
             }
             return true;
         }
+        public Coupon ValidateCoupon(string couponCode)
+        {
+            Coupon coupon = new Coupon();
+            bool flag = false;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = String.Format(
+                    "select * from CouponCodes where code= '{0}'",
+                    couponCode
+                    );
+                con.Open();
+                try
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        coupon.code = dr["code"].ToString();
+                        coupon.id = dr["id"].ToString();
+                        coupon.discount = Int32.Parse(dr["discount"].ToString());
+                        coupon.status = dr["status"].ToString();
+                        coupon.creator = dr["creator"].ToString();
+                        flag = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+
+            }
+            if(flag == true) {
+                return coupon;
+            }
+            else
+            {
+                coupon.code = "N/A";
+                return coupon;
+            }
+            
+        }
     }
 }

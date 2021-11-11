@@ -118,5 +118,20 @@ namespace DatabaseAPIs.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("user/coupon")]
+        public HttpResponseMessage ValidateCoupon(string code)
+        {
+            try
+            {
+                Coupon data = db.ValidateCoupon(code);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(e);
+            }
+        }
+
     }
 }

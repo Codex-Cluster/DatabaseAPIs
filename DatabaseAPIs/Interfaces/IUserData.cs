@@ -20,5 +20,7 @@ namespace DatabaseAPIs.Interfaces
 
         bool MoveToCart(string userID, string item, int qty);
         bool MoveToWishlist(string userID, string item, int qty);
+
+        Coupon ValidateCoupon(string coupon);
     }
 }
